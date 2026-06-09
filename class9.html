@@ -13,11 +13,80 @@
 
 <br>
 
-<input type="text" placeholder="Enter Student Name">
+<input id="name" type="text" placeholder="Enter Student Name">
 
 <br><br>
 
-<button>Check Result</button>
+<button onclick="searchStudent()">Check Result</button>
+
+<div id="output"></div>
+
+<script>
+
+const API_URL = "https://script.google.com/macros/s/AKfycbwBYhNX4GUSYigZnDDTenzga7eTai8eqEIjOSlzWffk-cP6vxqFIj-oNVl7J6ypUs4YWw/exec";
+
+function searchStudent(){
+
+let studentName =
+document.getElementById("name").value;
+
+fetch(
+API_URL +
+"?class=Class9&name=" +
+encodeURIComponent(studentName)
+)
+
+.then(response => response.json())
+
+.then(data => {
+
+let html = "";
+
+if(data.length == 0){
+
+html = "<h3>No Record Found</h3>";
+
+}
+else{
+
+html += "<h2>Test History</h2>";
+
+html += `
+<table border="1" style="margin:auto;background:white;color:black;">
+<tr>
+<th>Date</th>
+<th>Obtained</th>
+<th>Maximum</th>
+<th>Rank</th>
+<th>Status</th>
+</tr>
+`;
+
+data.forEach(row=>{
+
+html += `
+<tr>
+<td>${row.date}</td>
+<td>${row.obtained}</td>
+<td>${row.max}</td>
+<td>${row.rank}</td>
+<td>${row.status}</td>
+</tr>
+`;
+
+});
+
+html += "</table>";
+
+}
+
+document.getElementById("output").innerHTML = html;
+
+});
+
+}
+
+</script>
 
 </body>
 </html>
